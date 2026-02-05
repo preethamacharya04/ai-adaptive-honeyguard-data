@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>HoneyGuard Secure Banking</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <style>
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: #eef1f5;
+            margin: 0;
+            color: #222;
+        }
+
+        .center {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .card {
+            background: white;
+            padding: 28px;
+            width: 360px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        input,
+        button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 12px;
+            font-size: 14px;
+        }
+
+        button {
+            background: linear-gradient(135deg, #0052cc, #007bff);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        header {
+            background: #002f6c;
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .tabs {
+            background: #f5f7fa;
+            padding: 12px;
+            display: flex;
+            gap: 10px;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .tabs button {
+            width: auto;
+            background: #fff;
+            color: #002f6c;
+            border: 1px solid #ccc;
+            border-radius: 20px;
+            padding: 6px 14px;
+            font-size: 13px;
+        }
+
+        .section {
+            display: none;
+            background: white;
+            margin: 15px;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .info {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px dashed #ddd;
+        }
+
+        .label {
+            color: #666;
+            font-size: 13px;
+        }
+
+        .value {
+            font-weight: 600;
+        }
+
+        .masked {
+            letter-spacing: 2px;
+        }
+
+        .reveal {
+            font-size: 12px;
+            color: #007bff;
+            cursor: pointer;
+        }
+
+        ul {
+            padding-left: 20px;
+        }
+
+        .risk {
+            margin: 15px;
+            padding: 12px;
+            border-radius: 8px;
+            background: #e8f5e9;
+            color: #1b5e20;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- LOGIN -->
+    <div id="loginScreen" class="center">
+        <div class="card">
+            <h2>🏦 HoneyGuard Secure Bank</h2>
+            <p style="font-size:13px;color:#555">Authorized access only</p>
+
+            <input id="username" placeholder="Customer ID" />
+            <input id="password" type="password" placeholder="Password" />
+
+            <button onclick="login()">Login</button>
+            <p id="error" style="color:red"></p>
+        </div>
+    </div>
+
+    <!-- DASHBOARD -->
+    <div id="dashboard" style="display:none;">
+
+        <header>
+            <div>Welcome, Rahul Sharma</div>
+            <button onclick="logout()">Logout</button>
+        </header>
+
+        <div class="risk">🟢 Session Risk: LOW (Normal Customer)</div>
+
+        <div class="tabs">
+            <button onclick="showSection('customer')">Customer</button>
+            <button onclick="showSection('account')">Account</button>
+            <button onclick="showSection('balance')">Balance</button>
+            <button onclick="showSection('transactions')">Transactions</button>
+        </div>
+
+        <div id="customer" class="section">
+            <h3>👤 Personal Details</h3>
+            <div class="info"><span class="label">Name</span><span class="value">Rahul Sharma</span></div>
+            <div class="info"><span class="label">DOB</span><span class="value">12 May 1996</span></div>
+            <div class="info"><span class="label">Mobile</span><span class="value masked" id="mobile">9XXX-XXX-210 <span
+                        class="reveal" onclick="reveal('mobile','9876543210')">👁 View</span></span></div>
+            <div class="info"><span class="label">Email</span><span class="value masked" id="email">ra****@gmail.com
+                    <span class="reveal" onclick="reveal('email','rahul.sharma@gmail.com')">👁 View</span></span></div>
+            <div class="info"><span class="label">Address</span><span class="value">Bangalore, India</span></div>
+            <div class="info"><span class="label">KYC Status</span><span class="value">✔ Verified</span></div>
+        </div>
+
+        <div id="account" class="section">
+            <h3>🏦 Account Information</h3>
+            <div class="info"><span class="label">Account Number</span><span class="value masked" id="acc">XXXX-9012
+                    <span class="reveal" onclick="reveal('acc','1234-5678-9012')">👁 View</span></span></div>
+            <div class="info"><span class="label">IFSC</span><span class="value">HDBG0001245</span></div>
+            <div class="info"><span class="label">Account Type</span><span class="value">Savings</span></div>
+            <div class="info"><span class="label">Branch</span><span class="value">Indiranagar</span></div>
+            <div class="info"><span class="label">Account Status</span><span class="value">Active</span></div>
+        </div>
+
+        <div id="balance" class="section">
+            <h3>💰 Balance</h3>
+            <div class="info"><span class="label">Available Balance</span><span class="value">₹1,24,560.00</span></div>
+            <div class="info"><span class="label">Last Updated</span><span class="value">Today, 10:42 AM</span></div>
+        </div>
+
+        <div id="transactions" class="section">
+            <h3>📜 Recent Transactions</h3>
+            <ul>
+                <li>₹18,000 — Salary Credit</li>
+                <li>₹5,000 — Amazon Purchase</li>
+                <li>₹2,500 — Swiggy</li>
+                <li>₹1,200 — Electricity Bill</li>
+                <li>₹900 — UPI Transfer</li>
+            </ul>
+        </div>
+
+    </div>
+
+    <script>
+        function login() {
+            const u = username.value;
+            const p = password.value;
+            if (u && p) {
+                loginScreen.style.display = "none";
+                dashboard.style.display = "block";
+                showSection('customer');
+            } else {
+                error.innerText = "Invalid credentials";
+            }
+        }
+
+        function logout() {
+            dashboard.style.display = "none";
+            loginScreen.style.display = "flex";
+        }
+
+        function showSection(id) {
+            document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
+            document.getElementById(id).style.display = 'block';
+        }
+        function reveal(id, realValue) {
+            const el = document.getElementById(id);
+            el.innerHTML = realValue;
+            el.classList.remove('masked');
+        }
+    </script>
+
+</body>
+
+</html>
